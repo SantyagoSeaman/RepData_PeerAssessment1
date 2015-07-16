@@ -20,14 +20,14 @@ Show any code that is needed to
 2. Process/transform the data (if necessary) into a format suitable for your analysis
 
 ```{r loading}
-data = read.csv("activity.csv",
+data <- read.csv("activity.csv",
                 header=TRUE,
                 sep=",",
                 na.strings="NA")
 #Convert to Date
-data$date = as.Date(as.character(data$date), "%Y-%m-%d")
+data$date <- as.Date(as.character(data$date), "%Y-%m-%d")
 #Remove from data rows without steps data
-dataTidy = data[!is.na(data$steps), ]
+dataTidy <- data[!is.na(data$steps), ]
 ```
 
 Adding tool functions:
@@ -53,7 +53,7 @@ For this part of the assignment, you can ignore the missing values in the datase
 2. Calculate and report the mean and median total number of steps taken per day
 
 ```{r q1}
-sumStep = aggregate(steps~date,
+sumStep <- aggregate(steps~date,
                     dataTidy,
                     sum)
 
@@ -62,8 +62,8 @@ hist(sumStep$steps,
      main="Total number of steps per day",
      xlab="Steps Per Day")
 
-meanStep = mean(sumStep$steps)
-medianStep = median(sumStep$steps)
+meanStep <- mean(sumStep$steps)
+medianStep <- median(sumStep$steps)
 ```
 - The **mean** of steps per days: *`r meanStep`*
 - The **median** of steps per days: *`r medianStep`*
@@ -74,7 +74,7 @@ medianStep = median(sumStep$steps)
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 ``` {r q2}
-avgStep = aggregate(steps~interval, dataTidy, mean)
+avgStep <- aggregate(steps~interval, dataTidy, mean)
 
 plot(avgStep$step,
      type="l",
@@ -84,9 +84,9 @@ plot(avgStep$step,
      ylab="Average number of steps")
 
 #check which 5-minute interval contains the maximum number of steps
-maxIdx = which.max(avgStep$steps)
-maxInterval = avgStep[maxIdx, 'interval']
-maxAvgStep = avgStep[maxIdx, 'steps']
+maxIdx <- which.max(avgStep$steps)
+maxInterval <- avgStep[maxIdx, 'interval']
+maxAvgStep <- avgStep[maxIdx, 'steps']
 ```
 - 5-minute interval number: `r maxInterval`
 - Time of day: from `r convert.interval(maxInterval)` till `r convert.interval(maxInterval + 5)`
@@ -105,28 +105,28 @@ Note that there are a number of days/intervals where there are missing values (c
 
 ``` {r q3_1}
 #calulate the total number of missing values in the dataset
-totalNA = sum(is.na(data$steps))
+totalNA <- sum(is.na(data$steps))
 ```
 - The **total number** of missing values in the dataset: __`r totalNA`__
 
 ``` {r q3_2}
 # strategy : assign 5-minute average to NAs
-naIdx = which(is.na(data$steps))
-dataNew = data
-dataNew[naIdx, 'steps'] = sapply(data[naIdx, 3],
+naIdx <- which(is.na(data$steps))
+dataNew <- data
+dataNew[naIdx, 'steps'] <- sapply(data[naIdx, 3],
                                  function(x) {
                                      floor(avgStep[(avgStep$interval==x), 2])
                                      }
                                  )
 
-sumStepNew = aggregate(steps~date, dataNew, sum)
+sumStepNew <- aggregate(steps~date, dataNew, sum)
 
 hist(sumStepNew$steps,
      col="red",
      main="Total number of steps taken each day", xlab="Total Number of Steps")
 
-meanStepNew = mean(sumStepNew$steps)
-medianStepNew = median(sumStepNew$steps)
+meanStepNew <- mean(sumStepNew$steps)
+medianStepNew <- median(sumStepNew$steps)
 ```
 - The **mean** and **median** of total number of steps taken per day are `r meanStepNew` and `r medianStepNew` respectively. We got a very small difference between previous values.
 
@@ -139,9 +139,9 @@ For this part the weekdays() function may be of some help here. Use the dataset 
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). The plot should look something like the following, which was created using simulated data.
 
 ```{r q4}
-dataNew['dateIs'] = factor(sapply(dataNew$date, convert.weekday))
+dataNew['dateIs'] <- factor(sapply(dataNew$date, convert.weekday))
 
-avgStepDateIs = aggregate(steps~interval + dateIs, mean, data=dataNew)
+avgStepDateIs <- aggregate(steps~interval + dateIs, mean, data=dataNew)
 
 xyplot( steps ~ interval | dateIs, data = avgStepDateIs, type="l", layout=c(1,2), xlab="Interval", ylab="Number of steps")
 

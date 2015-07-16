@@ -11,14 +11,14 @@ Show any code that is needed to
 
 
 ```r
-data = read.csv("activity.csv",
+data <- read.csv("activity.csv",
                 header=TRUE,
                 sep=",",
                 na.strings="NA")
 #Convert to Date
-data$date = as.Date(as.character(data$date), "%Y-%m-%d")
+data$date <- as.Date(as.character(data$date), "%Y-%m-%d")
 #Remove from data rows without steps data
-dataTidy = data[!is.na(data$steps), ]
+dataTidy <- data[!is.na(data$steps), ]
 ```
 
 Adding tool functions:
@@ -59,8 +59,8 @@ hist(sumStep$steps,
 ![](PA1_template_files/figure-html/q1-1.png) 
 
 ```r
-meanStep = mean(sumStep$steps)
-medianStep = median(sumStep$steps)
+meanStep <- mean(sumStep$steps)
+medianStep <- median(sumStep$steps)
 ```
 - The **mean** of steps per days: *10766.1886792*
 - The **median** of steps per days: *10765*
@@ -86,9 +86,9 @@ plot(avgStep$step,
 
 ```r
 #check which 5-minute interval contains the maximum number of steps
-maxIdx = which.max(avgStep$steps)
-maxInterval = avgStep[maxIdx, 'interval']
-maxAvgStep = avgStep[maxIdx, 'steps']
+maxIdx <- which.max(avgStep$steps)
+maxInterval <- avgStep[maxIdx, 'interval']
+maxAvgStep <- avgStep[maxIdx, 'steps']
 ```
 - 5-minute interval number: 835
 - Time of day: from 13:55:00 till 14:00:00
@@ -108,22 +108,22 @@ Note that there are a number of days/intervals where there are missing values (c
 
 ```r
 #calulate the total number of missing values in the dataset
-totalNA = sum(is.na(data$steps))
+totalNA <- sum(is.na(data$steps))
 ```
 - The **total number** of missing values in the dataset: __2304__
 
 
 ```r
 # strategy : assign 5-minute average to NAs
-naIdx = which(is.na(data$steps))
-dataNew = data
-dataNew[naIdx, 'steps'] = sapply(data[naIdx, 3],
+naIdx <- which(is.na(data$steps))
+dataNew <- data
+dataNew[naIdx, 'steps'] <- sapply(data[naIdx, 3],
                                  function(x) {
                                      floor(avgStep[(avgStep$interval==x), 2])
                                      }
                                  )
 
-sumStepNew = aggregate(steps~date, dataNew, sum)
+sumStepNew <- aggregate(steps~date, dataNew, sum)
 
 hist(sumStepNew$steps,
      col="red",
@@ -133,8 +133,8 @@ hist(sumStepNew$steps,
 ![](PA1_template_files/figure-html/q3_2-1.png) 
 
 ```r
-meanStepNew = mean(sumStepNew$steps)
-medianStepNew = median(sumStepNew$steps)
+meanStepNew <- mean(sumStepNew$steps)
+medianStepNew <- median(sumStepNew$steps)
 ```
 - The **mean** and **median** of total number of steps taken per day are 10749.7704918 and 10641 respectively. We got a very small difference between previous values.
 
@@ -148,9 +148,9 @@ For this part the weekdays() function may be of some help here. Use the dataset 
 
 
 ```r
-dataNew['dateIs'] = factor(sapply(dataNew$date, convert.weekday))
+dataNew['dateIs'] <- factor(sapply(dataNew$date, convert.weekday))
 
-avgStepDateIs = aggregate(steps~interval + dateIs, mean, data=dataNew)
+avgStepDateIs <- aggregate(steps~interval + dateIs, mean, data=dataNew)
 
 xyplot( steps ~ interval | dateIs, data = avgStepDateIs, type="l", layout=c(1,2), xlab="Interval", ylab="Number of steps")
 ```
